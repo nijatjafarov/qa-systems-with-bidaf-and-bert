@@ -50,7 +50,7 @@ class BiDAF(nn.Module):
         self.contextual_lstm = nn.LSTM(total_emb_dim, cfg.hidden_size, batch_first=True,
                                        bidirectional=True, dropout=cfg.dropout)
 
-        self.modeling_lstm = nn.LSTM(4*cfg.hidden_size, cfg.hidden_size, batch_first=True,
+        self.modeling_lstm = nn.LSTM(8*cfg.hidden_size, cfg.hidden_size, batch_first=True,
                                      bidirectional=True, dropout=cfg.dropout, num_layers=2)
 
         self.start_fc = nn.Linear(2*cfg.hidden_size, 1)
