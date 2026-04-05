@@ -18,7 +18,7 @@ class SQuADBiDAFDataset(Dataset):
             self.char2idx = {'<PAD>': 0, '<UNK>': 1}
             self._build_vocab()
         else:
-            self.tokenizer = BertTokenizer.from_pretrained(cfg.bert_name)
+            self.tokenizer = BertTokenizer.from_pretrained(cfg.bert_name, model_max_length=cfg.max_seq_len)
 
         self.examples = []
         for ex in self.data:
@@ -43,11 +43,13 @@ class SQuADBiDAFDataset(Dataset):
                 self.examples.append((c_word_ids, c_char_ids, q_word_ids, q_char_ids, start_pos, end_pos))
             else:
                 # BERT encoding
-                encoded = self.tokenizer(question, context,
-                                         max_length=cfg.max_seq_len,
-                                         truncation='only_second',
-                                         padding='max_length',
-                                         return_tensors='pt')
+                encoded = self.tokenizer(
+                    question, context,
+                    max_length=cfg.max_seq_len,
+                    truncation='only_second',   # keep question, truncate context
+                    padding='max_length',
+                    return_tensors='pt'
+                )
                 # Map answer start/end to token positions
                 start_pos, end_pos = self._bert_answer_span(context, answer_start, answer_end, encoded)
                 if start_pos is None:

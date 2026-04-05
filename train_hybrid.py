@@ -1,7 +1,7 @@
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
-from transformers import AdamW
+from torch.optim import AdamW
 from tqdm import tqdm
 from config import Config
 from models.bert_bidaf import BertBiDAF
